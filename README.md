@@ -1,6 +1,5 @@
 # YAML Query (`yq`), a Go Bonzai Branch
 
-![WIP](https://img.shields.io/badge/status-wip-red)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/rwxrob/yq)
 [![GoDoc](https://godoc.org/github.com/rwxrob/yq?status.svg)](https://godoc.org/github.com/rwxrob/yq)
 [![License](https://img.shields.io/badge/license-Apache2-brightgreen.svg)](LICENSE)

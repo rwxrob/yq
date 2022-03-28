@@ -1,10 +1,9 @@
 package yq
 
 import (
-	"log"
-
 	"github.com/rwxrob/bonzai"
 	"github.com/rwxrob/bonzai/inc/help"
+	yq "github.com/rwxrob/yq/pkg"
 )
 
 var Cmd = &bonzai.Cmd{
@@ -33,8 +32,16 @@ var Cmd = &bonzai.Cmd{
 		philosophy). Note that the special dash (-) filename is not
 		supported even though it was in the original <yq> tool.`,
 
-	Call: func(_ *bonzai.Cmd, args ...string) error {
-		log.Printf("would run yq stuff")
-		return nil
+	Call: func(x *bonzai.Cmd, args ...string) error {
+		var files []string
+		switch len(args) {
+		case 1:
+			files = append(files, "-")
+		case 0:
+			return x.UsageError()
+		default:
+			files = append(files, args...)
+		}
+		return yq.Evaluate(args[0], args[1:]...)
 	},
 }
