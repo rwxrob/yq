@@ -9,7 +9,7 @@ This is the `yq` Go expression evaluator calling the same `yqlib` code
 but wrapped in Bonzai (instead of Cobra) making it more portable and
 composable into one's own Bonzai command trees along with other
 commands. A simplified, high-level function calling into the `yqlib`
-with reasonable defaults is also provided in the [`pkg`](pkg) allowing
+with reasonable defaults is also provided in the [`pkg`](pkg/yq.go) allowing
 other non-Bonzai applications to easily duplicate the same
 functionality.
 
