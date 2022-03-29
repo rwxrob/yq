@@ -1,6 +1,7 @@
 package yq
 
 import (
+	"bytes"
 	"io"
 	"os"
 
@@ -48,4 +49,33 @@ func Evaluate(expr string, files ...string) error {
 	dc := yqlib.NewYamlDecoder()
 
 	return ev.EvaluateFiles(expr, files, pr, true, dc)
+}
+
+// EvaluateToString is the same as Evaluate but returns a string with
+// the output instead.
+func EvaluateToString(expr string, files ...string) (string, error) {
+
+	if len(files) == 0 {
+		files = append(files, "-")
+	}
+
+	format := logging.MustStringFormatter(
+		`%{color}%{time:15:04:05} %{shortfunc} [%{level:.4s}]%{color:reset} %{message}`,
+	)
+	b1 := logging.NewLogBackend(os.Stderr, "", 0)
+	b2 := logging.AddModuleLevel(logging.NewBackendFormatter(b1, format))
+	b2.SetLevel(logging.ERROR, "")
+	logging.SetBackend(b2)
+
+	buf := new(bytes.Buffer)
+
+	ev := yqlib.NewAllAtOnceEvaluator()
+	pr := NewPrinter(buf, yqlib.YamlOutputFormat, true, false, 2, true)
+	dc := yqlib.NewYamlDecoder()
+
+	if err := ev.EvaluateFiles(expr, files, pr, true, dc); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }
