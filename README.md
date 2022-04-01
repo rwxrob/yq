@@ -28,13 +28,13 @@ Composed
 package z
 
 import (
-	"github.com/rwxrob/bonzai"
+	Z "github.com/rwxrob/bonzai"
 	"github.com/rwxrob/yq"
 )
 
-var Cmd = &bonzai.Cmd{
+var Cmd = &Z.Cmd{
 	Name:     `cmds`,
-	Commands: []*bonzai.Cmd{help.Cmd, yq.Cmd},
+	Commands: []*Z.Cmd{help.Cmd, yq.Cmd},
 }
 ```
 

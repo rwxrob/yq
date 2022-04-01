@@ -1,12 +1,12 @@
 package yq
 
 import (
-	"github.com/rwxrob/bonzai"
+	Z "github.com/rwxrob/bonzai"
 	"github.com/rwxrob/bonzai/inc/help"
 	yq "github.com/rwxrob/yq/pkg"
 )
 
-var Cmd = &bonzai.Cmd{
+var Cmd = &Z.Cmd{
 
 	Name:      `yq`,
 	Summary:   `query YAML and JSON files`,
@@ -14,7 +14,7 @@ var Cmd = &bonzai.Cmd{
 	Version:   `v0.0.1`,
 	Copyright: `Copyright 2021 Robert S Muhlestein`,
 	License:   `Apache-2.0`,
-	Commands:  []*bonzai.Cmd{help.Cmd},
+	Commands:  []*Z.Cmd{help.Cmd},
 
 	Description: `
 		The <yq> command allows YAML (and JSON, since all JSON is YAML)
@@ -32,7 +32,7 @@ var Cmd = &bonzai.Cmd{
 		philosophy). Note that the special dash (-) filename is not
 		supported even though it was in the original <yq> tool.`,
 
-	Call: func(x *bonzai.Cmd, args ...string) error {
+	Call: func(x *Z.Cmd, args ...string) error {
 		var files []string
 		switch len(args) {
 		case 1:
