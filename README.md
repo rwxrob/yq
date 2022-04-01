@@ -1,15 +1,16 @@
-# YAML Query (`yq`), a Go Bonzai Branch
+# 🌳 Query YAML Data
 
 [![GoDoc](https://godoc.org/github.com/rwxrob/yq?status.svg)](https://godoc.org/github.com/rwxrob/yq)
 [![License](https://img.shields.io/badge/license-Apache2-brightgreen.svg)](LICENSE)
 
-This is the `yq` Go expression evaluator calling the same `yqlib` code
-but wrapped in Bonzai (instead of Cobra) making it more portable and
-composable into one's own Bonzai command trees along with other
-commands. A simplified, high-level function calling into the `yqlib`
-with reasonable defaults is also provided in the [`pkg`](pkg/yq.go) allowing
-other non-Bonzai applications to easily duplicate the same
-functionality.
+This is the same popular `yq` tool (written in Go) that uses the same
+`yqlib` code but as a [Bonzai](https://github.com/rwxrob/bonzai)
+composite command (instead of Cobra) making it more portable and usable
+in one's own Bonzai command tree monoliths and multicall binaries along
+with other commands. It includes simplified `Evaluate` and
+`EvaluateToString` high-level `pkg` functions calling into the `yqlib`
+with reasonable defaults allowing other non-Bonzai applications to
+easily duplicate the same functionality.
 
 ## Install
 
