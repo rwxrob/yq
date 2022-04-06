@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/mikefarah/yq/v4 v4.24.2
-	github.com/rwxrob/bonzai v0.1.0
+	github.com/rwxrob/bonzai v0.1.2
 	gopkg.in/op/go-logging.v1 v1.0.0-20160211212156-b2cb9fa56473
 )
 
