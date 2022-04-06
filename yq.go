@@ -1,8 +1,8 @@
 package yq
 
 import (
-	Z "github.com/rwxrob/bonzai"
-	"github.com/rwxrob/bonzai/inc/help"
+	"github.com/rwxrob/bonzai/help"
+	Z "github.com/rwxrob/bonzai/z"
 	yq "github.com/rwxrob/yq/pkg"
 )
 
@@ -17,10 +17,10 @@ var Cmd = &Z.Cmd{
 	Commands:  []*Z.Cmd{help.Cmd},
 
 	Description: `
-		The <yq> command allows YAML (and JSON, since all JSON is YAML)
+		The *yq* command allows YAML (and JSON, since all JSON is YAML)
 		files to be queried using a simple syntax that is nearly identical
-		to the popular stedolan/jq tool (written in C). In fact, <yq> uses
-		the same <yqlib> that the <yq> tool does (just without the Cobra).
+		to the popular stedolan/jq tool (written in C). In fact, *yq* uses
+		the same *yqlib* that the *yq* tool does (just without the Cobra).
 
 		The first argument is the <expression> and almost always begins with
 		a dot (.). See the <https://github.com/stedolan/jq> project for
@@ -30,7 +30,7 @@ var Cmd = &Z.Cmd{
 		The remaining arguments are the names of one or more files. If no
 		file argument is passed standard input is assumed (per UNIX filter
 		philosophy). Note that the special dash (-) filename is not
-		supported even though it was in the original <yq> tool.`,
+		supported even though it was in the original *yq* tool.`,
 
 	Call: func(x *Z.Cmd, args ...string) error {
 		var files []string
