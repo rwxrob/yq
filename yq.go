@@ -11,7 +11,7 @@ var Cmd = &Z.Cmd{
 	Name:      `yq`,
 	Summary:   `query YAML and JSON files`,
 	Usage:     `(h|help|<expression>) [<file>...]`,
-	Version:   `v0.0.1`,
+	Version:   `v0.2.4`,
 	Copyright: `Copyright 2021 Robert S Muhlestein`,
 	License:   `Apache-2.0`,
 	Commands:  []*Z.Cmd{help.Cmd},
