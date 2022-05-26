@@ -8,7 +8,7 @@ This is the same popular `yq` tool (written in Go) that uses the same
 composite command (instead of Cobra) making it more portable and usable
 in one's own Bonzai command tree monoliths and multicall binaries along
 with other commands. It includes simplified `Evaluate` and
-`EvaluateToString` high-level `pkg` functions calling into the `yqlib`
+`EvaluateToString` high-level functions calling into the `yqlib`
 with reasonable defaults allowing other non-Bonzai applications to
 easily duplicate the same functionality.
 
@@ -20,7 +20,7 @@ a Bonzai command tree.
 Standalone
 
 ```
-go install github.com/rwxrob/yq/yq@latest
+go install github.com/rwxrob/yq/cmd/yq@latest
 ```
 
 Composed
@@ -29,7 +29,7 @@ Composed
 package z
 
 import (
-	Z "github.com/rwxrob/bonzai"
+	Z "github.com/rwxrob/bonzai/z"
 	"github.com/rwxrob/yq"
 )
 

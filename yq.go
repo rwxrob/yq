@@ -1,47 +1,81 @@
 package yq
 
 import (
-	Z "github.com/rwxrob/bonzai/z"
-	"github.com/rwxrob/help"
-	yq "github.com/rwxrob/yq/pkg"
+	"bytes"
+	"io"
+	"os"
+
+	"github.com/mikefarah/yq/v4/pkg/yqlib"
+	logging "gopkg.in/op/go-logging.v1"
 )
 
-var Cmd = &Z.Cmd{
+// NewPrinter is a convenience function for dealing with all the many
+// things that must be configured properly to get a usable
+// yqlib.Printer. This is useful for testing as well.
+func NewPrinter(
+	w io.Writer,
+	f yqlib.PrinterOutputFormat,
+	unwrap bool,
+	colors bool,
+	indent int,
+	sep bool,
+) yqlib.Printer {
+	enc := yqlib.NewYamlEncoder(indent, colors, sep, unwrap)
+	pwr := yqlib.NewSinglePrinterWriter(w)
+	return yqlib.NewPrinter(enc, pwr)
+}
 
-	Name:      `yq`,
-	Summary:   `query YAML and JSON files`,
-	Usage:     `(help|<expression>) [<file>...]`,
-	Version:   `v0.2.4`,
-	Copyright: `Copyright 2021 Robert S Muhlestein`,
-	License:   `Apache-2.0`,
-	Commands:  []*Z.Cmd{help.Cmd},
+// Evaluate creates a yqlib Evaluator and applies it to one or more
+// files with reasonable, predictable defaults for logging, decoding,
+// and printing. Only YAML files are supported.  Will read from standard
+// input if no arguments are passed.
+func Evaluate(expr string, files ...string) error {
 
-	Description: `
-		The *yq* command allows YAML (and JSON, since all JSON is YAML)
-		files to be queried using a simple syntax that is nearly identical
-		to the popular stedolan/jq tool (written in C). In fact, *yq* uses
-		the same *yqlib* that the *yq* tool does (just without the Cobra).
+	if len(files) == 0 {
+		files = append(files, "-")
+	}
 
-		The first argument is the <expression> and almost always begins with
-		a dot (.). See the <https://github.com/stedolan/jq> project for
-		exact syntax (until more documentation is updated here to contain
-		the same).
+	// FIXME(rwxrob) shitty log shit, god i HATE op/go-logging (circa 2012)
+	format := logging.MustStringFormatter(
+		`%{color}%{time:15:04:05} %{shortfunc} [%{level:.4s}]%{color:reset} %{message}`,
+	)
+	b1 := logging.NewLogBackend(os.Stderr, "", 0)
+	b2 := logging.AddModuleLevel(logging.NewBackendFormatter(b1, format))
+	b2.SetLevel(logging.ERROR, "")
+	logging.SetBackend(b2)
 
-		The remaining arguments are the names of one or more files. If no
-		file argument is passed standard input is assumed (per UNIX filter
-		philosophy). Note that the special dash (-) filename is not
-		supported even though it was in the original *yq* tool.`,
+	ev := yqlib.NewAllAtOnceEvaluator()
+	pr := NewPrinter(os.Stdout, yqlib.YamlOutputFormat, true, false, 2, true)
+	dc := yqlib.NewYamlDecoder()
 
-	Call: func(x *Z.Cmd, args ...string) error {
-		var files []string
-		switch len(args) {
-		case 1:
-			files = append(files, "-")
-		case 0:
-			return x.UsageError()
-		default:
-			files = append(files, args...)
-		}
-		return yq.Evaluate(args[0], args[1:]...)
-	},
+	return ev.EvaluateFiles(expr, files, pr, true, dc)
+}
+
+// EvaluateToString is the same as Evaluate but returns a string with
+// the output instead.
+func EvaluateToString(expr string, files ...string) (string, error) {
+
+	if len(files) == 0 {
+		files = append(files, "-")
+	}
+
+	format := logging.MustStringFormatter(
+		`%{color}%{time:15:04:05} %{shortfunc} [%{level:.4s}]%{color:reset} %{message}`,
+	)
+	b1 := logging.NewLogBackend(os.Stderr, "", 0)
+	b2 := logging.AddModuleLevel(logging.NewBackendFormatter(b1, format))
+	b2.SetLevel(logging.ERROR, "")
+	logging.SetBackend(b2)
+
+	buf := new(bytes.Buffer)
+
+	ev := yqlib.NewAllAtOnceEvaluator()
+	pr := NewPrinter(buf, yqlib.YamlOutputFormat, true, false, 2, true)
+	dc := yqlib.NewYamlDecoder()
+
+	if err := ev.EvaluateFiles(expr, files, pr, true, dc); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }
