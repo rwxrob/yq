@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/mikefarah/yq/v4/pkg/yqlib"
 	logging "gopkg.in/op/go-logging.v1"
@@ -77,5 +78,5 @@ func EvaluateToString(expr string, files ...string) (string, error) {
 		return "", err
 	}
 
-	return buf.String(), nil
+	return strings.TrimSpace(buf.String()), nil
 }
