@@ -12,7 +12,7 @@ var Cmd = &Z.Cmd{
 	Summary:   `query YAML and JSON files`,
 	Usage:     `(help|<expression>) [<file>...]`,
 	Comp:      compfile.New(),
-	Version:   `v0.3.1`,
+	Version:   `v0.3.2`,
 	Copyright: `Copyright 2021 Robert S Muhlestein`,
 	License:   `Apache-2.0`,
 	Commands:  []*Z.Cmd{help.Cmd},
