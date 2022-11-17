@@ -21,7 +21,11 @@ func NewPrinter(
 	indent int,
 	sep bool,
 ) yqlib.Printer {
-	enc := yqlib.NewYamlEncoder(indent, colors, sep, unwrap)
+	prefs := yqlib.YamlPreferences{
+		PrintDocSeparators: sep,
+		UnwrapScalar:       unwrap,
+	}
+	enc := yqlib.NewYamlEncoder(indent, colors, prefs)
 	pwr := yqlib.NewSinglePrinterWriter(w)
 	return yqlib.NewPrinter(enc, pwr)
 }
@@ -47,9 +51,10 @@ func Evaluate(expr string, files ...string) error {
 
 	ev := yqlib.NewAllAtOnceEvaluator()
 	pr := NewPrinter(os.Stdout, yqlib.YamlOutputFormat, true, false, 2, true)
-	dc := yqlib.NewYamlDecoder()
+	prefs := yqlib.YamlPreferences{}
+	dc := yqlib.NewYamlDecoder(prefs)
 
-	return ev.EvaluateFiles(expr, files, pr, true, dc)
+	return ev.EvaluateFiles(expr, files, pr, dc)
 }
 
 // EvaluateToString is the same as Evaluate but returns a string with
@@ -72,9 +77,10 @@ func EvaluateToString(expr string, files ...string) (string, error) {
 
 	ev := yqlib.NewAllAtOnceEvaluator()
 	pr := NewPrinter(buf, yqlib.YamlOutputFormat, true, false, 2, true)
-	dc := yqlib.NewYamlDecoder()
+	prefs := yqlib.YamlPreferences{}
+	dc := yqlib.NewYamlDecoder(prefs)
 
-	if err := ev.EvaluateFiles(expr, files, pr, true, dc); err != nil {
+	if err := ev.EvaluateFiles(expr, files, pr, dc); err != nil {
 		return "", err
 	}
 
